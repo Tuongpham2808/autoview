@@ -35,13 +35,25 @@ function App() {
     let b = "";
     let a = link.indexOf("watch?v=");
     let c = link.indexOf("&");
+    let d = link.indexOf("https://youtu.be/");
+    let e = link.indexOf("https://www.youtube.com/");
 
-    if (a !== -1) {
+    if (e !== -1 && a !== -1) {
       if (c !== -1) {
         b = link.slice(a + 8, c);
       } else {
         b = link.slice(a + 8);
       }
+    }
+    if (d !== -1) {
+      b = link.slice(-11);
+    }
+    if (d === -1 && e === -1) {
+      b = link;
+      setVideoId(b);
+      return;
+    }
+    if (b !== "") {
       setVideoId(b);
     } else {
       toast.error("Không tìm thấy video Id");
