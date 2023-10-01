@@ -1,23 +1,115 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { v4 } from "uuid";
+import { MdViewCompact } from "react-icons/md";
 
 function App() {
+  const [videoId, setVideoId] = useState("sKf1JDpdtpU");
+  const [videoInfo, setVideoInfo] = useState();
+  const [countView, setCountView] = useState(10);
+  const [arr, setArr] = useState([]);
+  useEffect(() => {
+    async function getListVideo() {
+      try {
+        let response = await axios.get(
+          `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}&key=AIzaSyBu1ps56IgALrAd5OcXaQr9JejnOmYqQbc`
+        );
+        setVideoInfo(response?.data?.items[0]?.statistics);
+      } catch (error) {
+        toast.error(error);
+      }
+    }
+    getListVideo();
+  }, [videoId]);
+
+  useEffect(() => {
+    let arr1 = [];
+    for (let i = 0; i < countView; i++) {
+      arr1.push(i);
+    }
+    setArr(arr1);
+  }, [countView]);
+
+  function getIdVideo(link) {
+    let b = "";
+    let a = link.indexOf("watch?v=");
+    let c = link.indexOf("&");
+
+    if (a !== -1) {
+      if (c !== -1) {
+        b = link.slice(a + 8, c);
+      } else {
+        b = link.slice(a + 8);
+      }
+      setVideoId(b);
+    } else {
+      toast.error("Không tìm thấy video Id");
+    }
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="flex items-center justify-center w-full h-full p-10 pt-0">
+      <div className="p-10 minHeight95 shadow-lg rounded-xl flex flex-col items-center">
+        <img
+          src="Logo.png"
+          alt="Logo Auto View"
+          className="w-2/3 h-auto block"
+        />
+        <input
+          type="text"
+          placeholder="Nhập vào link video"
+          className="px-3 py-2 rounded-3xl border-2 focus:border-orange-500 outline-none min-w-[500px]"
+          onChange={(e) => getIdVideo(e?.target?.value)}
+        />
+        <div className="mb-8 text-xl">Nhập vào link Playlist, link Video</div>
+        <div className="w-full h-5 mb-4 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            {videoInfo?.viewCount >= 0 && (
+              <p>Lượt xem: {videoInfo?.viewCount}</p>
+            )}
+            {videoInfo?.likeCount >= 0 && <p>Like: {videoInfo?.likeCount}</p>}
+            {videoInfo?.commentCount >= 0 && (
+              <p>Comment: {videoInfo?.commentCount}</p>
+            )}
+          </div>
+          <div className="flex items-center gap-1">
+            <MdViewCompact className="w-10 h-10 text-red-600"></MdViewCompact>
+            <input
+              type="number"
+              name="board view"
+              className="w-16 rounded border-2 focus:border-orange-500 outline-none"
+              min="5"
+              max="50"
+              defaultValue="10"
+              step="5"
+              placeholder="5"
+              onChange={(e) => setCountView(e.target.value)}
+            />
+          </div>
+        </div>
+        <ul className="p-2 list-video w-full flex flex-wrap items-center justify-center gap-2">
+          {arr?.map(
+            (item, i) =>
+              item?.snippet?.title !== "Private video" && (
+                <li
+                  key={v4()}
+                  className="w-[250px] h-[170px] rounded-lg border-2 overflow-hidden relative cursor-pointer"
+                >
+                  <iframe
+                    width="250"
+                    height="170"
+                    src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&afmt=55`}
+                    title="Main xuyên không đánh bại cả thần nhờ vào hệ thống lĩnh vực, Vừa Bắt Đầu Liền Vô Địch Full"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  ></iframe>
+                </li>
+              )
+          )}
+        </ul>
+      </div>
     </div>
   );
 }
