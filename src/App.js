@@ -49,8 +49,8 @@ function App() {
   }
 
   return (
-    <div className="flex items-center justify-center w-full h-full p-10 pt-0">
-      <div className="p-10 minHeight95 shadow-lg rounded-xl flex flex-col items-center">
+    <div className="flex items-center justify-center w-full h-full sm:px-10 pb-10 pt-0">
+      <div className="p-4 sm:p-10 minHeight95 shadow-lg rounded-xl flex flex-col items-center">
         <img
           src="Logo.png"
           alt="Logo Auto View"
@@ -59,11 +59,13 @@ function App() {
         <input
           type="text"
           placeholder="Nhập vào link video"
-          className="px-3 py-2 rounded-3xl border-2 focus:border-orange-500 outline-none min-w-[500px]"
+          className="px-3 py-2 rounded-3xl border-2 focus:border-orange-500 outline-none min-w-[300px] sm:min-w-[500px]"
           onChange={(e) => getIdVideo(e?.target?.value)}
         />
-        <div className="mb-8 text-xl">Nhập vào link Playlist, link Video</div>
-        <div className="w-full h-5 mb-4 flex items-center justify-between">
+        <div className="mb-8 text-base sm:text-xl">
+          Nhập vào link Playlist, link Video
+        </div>
+        <div className="w-full h-5 mb-10 sm:flex items-center justify-between">
           <div className="flex items-center gap-4">
             {videoInfo?.viewCount >= 0 && (
               <p>Lượt xem: {videoInfo?.viewCount}</p>
@@ -94,11 +96,11 @@ function App() {
               item?.snippet?.title !== "Private video" && (
                 <li
                   key={v4()}
-                  className="w-[250px] h-[170px] rounded-lg border-2 overflow-hidden relative cursor-pointer"
+                  className="w-[144px] h-[81px] rounded-lg border-2 overflow-hidden relative cursor-pointer"
                 >
                   <iframe
-                    width="250"
-                    height="170"
+                    width="144"
+                    height="81"
                     src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&afmt=55`}
                     title="Main xuyên không đánh bại cả thần nhờ vào hệ thống lĩnh vực, Vừa Bắt Đầu Liền Vô Địch Full"
                     frameBorder="0"
