@@ -46,7 +46,7 @@ function App() {
       }
     }
     if (d !== -1) {
-      b = link.slice(-11);
+      b = link.slice(17, 28);
     }
     if (d === -1 && e === -1) {
       b = link;
